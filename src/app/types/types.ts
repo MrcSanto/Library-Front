@@ -15,3 +15,9 @@ export interface Book {
     dataAdd?: Date;
     categoria: Categoria;
 }
+
+export interface Cliente {
+    clientId: number;
+    clientCpf: string;
+    clientNome: string;
+}

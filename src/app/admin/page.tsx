@@ -4,8 +4,9 @@ import {useEffect, useState} from 'react';
 import { useRouter } from 'next/navigation';
 import NavbarTop from "@/app/components/NavbarTop";
 import { AdminCard } from "../components/AdminCard";
-import {Book, Categoria} from '@/app/types/types'
+import {Book, Categoria, Cliente} from '@/app/types/types';
 import {Button, Col, Container, Form, Row, Spinner, Modal} from "react-bootstrap";
+import ClientTable from "@/app/components/ClientTable";
 
 export default function AdminPage() {
     const router = useRouter();
@@ -29,6 +30,9 @@ export default function AdminPage() {
     const [categories, setCategories] = useState<Categoria[]>([]);
     const [selectedCategoryId, setSelectedCategoryId] = useState<number | undefined>(undefined);
 
+    const [clients, setClients] = useState<Cliente[]>([]);
+    const [loadingClients, setLoadingClients] = useState<boolean>(true);
+
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (!token) {
@@ -36,13 +40,17 @@ export default function AdminPage() {
         }
     }, [router]);
 
-    useEffect(() => {
+    const fetchCategories = () => {
         fetch('http://localhost:5000/library/categories')
             .then(res => res.json())
             .then(data => {
                 setCategories(data);
             })
             .catch(err => console.error(err));
+    }
+
+    useEffect(() => {
+        fetchCategories();
     }, []);
 
     const fetchBooks = () => {
@@ -52,14 +60,38 @@ export default function AdminPage() {
         fetch(`http://localhost:5000/library/books/?skip=${currentPage}&take=${booksPerPage}`)
             .then(res => res.json())
             .then(data => {
-                console.log(data);
+                //console.log(data);
                 setBooks(data.data);
-                console.log(`http://localhost:5000/library/books/?skip=${currentPage}&take=${booksPerPage}`);
+                //console.log(`http://localhost:5000/library/books/?skip=${currentPage}&take=${booksPerPage}`);
             })
             .catch(err => console.log(err))
             .finally(() => setLoadingBook(false));
     }
 
+    useEffect(() => {
+        fetchClients();
+    }, []);
+
+    const fetchClients = () => {
+        setLoadingClients(true);
+        const token = localStorage.getItem('token');
+        fetch('http://localhost:5000/library/clients', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                setClients(data.data);
+                //console.log(data.data);
+            })
+            .catch((error) => console.error('Erro ao buscar clientes:', error))
+            .finally(() => setLoadingClients(false));
+    };
+
+    // handlers dos livros
     const handleUpdate = (updatedBook: Book) => {
         setBooks((prevBooks) =>
             prevBooks.map((book) => (book.bookId === updatedBook.bookId ? updatedBook : book))
@@ -67,7 +99,7 @@ export default function AdminPage() {
         alert("Livro atualizado com sucesso")
     };
 
-    const handleDelete = (bookId: number) => {
+    const handleDeleteBook = (bookId: number) => {
         setBooks((prevBooks) => prevBooks.filter((book) => book.bookId !== bookId));
         fetchBooks();
         alert("Livro deletado com sucesso")
@@ -93,6 +125,20 @@ export default function AdminPage() {
                 console.error('Erro ao adicionar livro:', error);
             });
     };
+
+    // handlers dos usuários
+    const handleUpdateCliente = (clientId: number) => {
+        console.log("Editar cliente:", clientId);
+    };
+
+    const handleDeleteCliente = (clientId: number) => {
+        console.log("Excluir cliente:", clientId);
+    };
+
+    const handleAddCliente = () => {
+        console.log("Adicionar novo cliente");
+    };
+
 
     useEffect(() => {
         fetchBooks();
@@ -150,16 +196,19 @@ export default function AdminPage() {
                                     <AdminCard
                                         book={book}
                                         onUpdate={handleUpdate}
-                                        onDelete={handleDelete}
+                                        onDelete={handleDeleteBook}
                                     />
                                 </Col>
                             ))
                         }
                     </Row>
                 </Container>
-                <Button variant="primary" onClick={() => setShowModal(true)}>Adicionar Novo Livro</Button>
+                <div className="d-flex justify-content-center mt-3">
+                    <Button variant="primary" onClick={() => setShowModal(true)}>Adicionar Novo Livro</Button>
+                </div>
+                <br/>
+                <br/>
             </div>
-
             <Modal show={showModal} onHide={() => setShowModal(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>Adicionar Novo Livro</Modal.Title>
@@ -217,14 +266,24 @@ export default function AdminPage() {
                     <Button variant="secondary" onClick={() => setShowModal(false)}>
                         Fechar
                     </Button>
-                    <Button variant="primary" onClick={handleAddBook}>
+                    <Button className='text-center' variant="primary" onClick={handleAddBook}>
                         Adicionar Livro
                     </Button>
                 </Modal.Footer>
             </Modal>
 
-            <h1 id="clientes" className='text-center'>Clientes</h1>
-            <p>Conteúdo relacionado a clientes.</p>
+
+            <div id="clientes" className="container">
+                <h1 className='text-center'>Clientes</h1>
+                <ClientTable
+                    loadingClients={loadingClients}
+                    clients={clients}
+                    handleEdit={handleUpdateCliente}
+                    handleDelete={handleDeleteCliente}
+                    handleAdd={handleAddCliente}
+                />
+            </div>
+
             <h1 id="emprestimos" className='text-center'>Empréstimos</h1>
             <p>Conteúdo relacionado a empréstimos.</p>
         </>

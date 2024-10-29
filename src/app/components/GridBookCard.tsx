@@ -21,7 +21,7 @@ export const CardGrid: React.FC<BookCardProps> = ({ books }) => {
                                 <strong>Autor:</strong> {book.autor} <br />
                                 <strong>Páginas:</strong> {book.paginas} <br />
                                 <strong>Categoria:</strong> {book.categoria.nome} <br />
-                                <strong>Disponível desde:</strong> {book.dataAdd.toString()} <br/>
+                                <strong>Disponível desde:</strong> {book.dataAdd ? book.dataAdd.toString() : 'Data não disponível'} <br/>
                                 <strong>Quantidade de empréstimos:</strong> {book.qtdEmprestimos}
                             </Card.Text>
                         </Card.Body>
