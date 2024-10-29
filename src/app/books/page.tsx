@@ -1,10 +1,10 @@
-// Page.tsx
 'use client';
 
 import { useState, useEffect } from "react";
 import {Container, Spinner, Row, Col, Form, Button} from 'react-bootstrap';
 
-import { BookCard, Book } from "@/app/components/BookCard";
+import { BookCard } from "@/app/components/BookCard";
+import { Book } from "@/app/types/types"
 import NavbarTop from "@/app/components/NavbarTop";
 import FooterBar from "@/app/components/FooterBar";
 

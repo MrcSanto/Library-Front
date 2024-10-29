@@ -11,7 +11,7 @@ export interface Book {
     isbn: number;
     paginas: number;
     restantes: number;
-    qtdEmprestimos: number;
-    dataAdd : Date;
+    qtdEmprestimos?: number;
+    dataAdd?: Date;
     categoria: Categoria;
 }
