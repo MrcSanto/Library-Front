@@ -4,9 +4,8 @@ import {useEffect, useState} from 'react';
 import { useRouter } from 'next/navigation';
 import NavbarTop from "@/app/components/NavbarTop";
 import { AdminCard } from "../components/AdminCard";
-import {Book, Categoria, Cliente} from '@/app/types/types';
+import {Book, Categoria} from '@/app/types/types';
 import {Button, Col, Container, Form, Row, Spinner, Modal} from "react-bootstrap";
-import ClientTable from "@/app/components/ClientTable";
 
 export default function AdminPage() {
     const router = useRouter();
@@ -30,9 +29,6 @@ export default function AdminPage() {
     const [categories, setCategories] = useState<Categoria[]>([]);
     const [selectedCategoryId, setSelectedCategoryId] = useState<number | undefined>(undefined);
 
-    const [clients, setClients] = useState<Cliente[]>([]);
-    const [loadingClients, setLoadingClients] = useState<boolean>(true);
-
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (!token) {
@@ -48,10 +44,6 @@ export default function AdminPage() {
             })
             .catch(err => console.error(err));
     }
-
-    useEffect(() => {
-        fetchCategories();
-    }, []);
 
     const fetchBooks = () => {
         if (currentPage <= 0) return; //por protecao
@@ -69,27 +61,8 @@ export default function AdminPage() {
     }
 
     useEffect(() => {
-        fetchClients();
+        fetchCategories();
     }, []);
-
-    const fetchClients = () => {
-        setLoadingClients(true);
-        const token = localStorage.getItem('token');
-        fetch('http://localhost:5000/library/clients', {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                setClients(data.data);
-                //console.log(data.data);
-            })
-            .catch((error) => console.error('Erro ao buscar clientes:', error))
-            .finally(() => setLoadingClients(false));
-    };
 
     // handlers dos livros
     const handleUpdate = (updatedBook: Book) => {
@@ -124,19 +97,6 @@ export default function AdminPage() {
             .catch(error => {
                 console.error('Erro ao adicionar livro:', error);
             });
-    };
-
-    // handlers dos usuários
-    const handleUpdateCliente = (clientId: number) => {
-        console.log("Editar cliente:", clientId);
-    };
-
-    const handleDeleteCliente = (clientId: number) => {
-        console.log("Excluir cliente:", clientId);
-    };
-
-    const handleAddCliente = () => {
-        console.log("Adicionar novo cliente");
     };
 
 
@@ -271,18 +231,6 @@ export default function AdminPage() {
                     </Button>
                 </Modal.Footer>
             </Modal>
-
-
-            <div id="clientes" className="container">
-                <h1 className='text-center'>Clientes</h1>
-                <ClientTable
-                    loadingClients={loadingClients}
-                    clients={clients}
-                    handleEdit={handleUpdateCliente}
-                    handleDelete={handleDeleteCliente}
-                    handleAdd={handleAddCliente}
-                />
-            </div>
 
             <h1 id="emprestimos" className='text-center'>Empréstimos</h1>
             <p>Conteúdo relacionado a empréstimos.</p>

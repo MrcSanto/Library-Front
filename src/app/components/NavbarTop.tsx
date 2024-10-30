@@ -49,7 +49,6 @@ export default function NavbarTop() {
                             <>
                                 <NavDropdown title="Admin" id="basic-nav-dropdown">
                                     <NavDropdown.Item onClick={() => handleRedirect('livros')}>Livros</NavDropdown.Item>
-                                    <NavDropdown.Item onClick={() => handleRedirect('clientes')}>Clientes</NavDropdown.Item>
                                     <NavDropdown.Item onClick={() => handleRedirect('emprestimos')}>Empréstimos</NavDropdown.Item>
                                 </NavDropdown>
                             </>
