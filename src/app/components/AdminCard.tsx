@@ -68,9 +68,13 @@ export const AdminCard: React.FC<BookCardProps> = ({ book, onUpdate, onDelete })
     return (
         <>
             <Card style={{ marginBottom: "1rem" }}>
-                <Card.Body>
-                    <Card.Title>{book.nome}</Card.Title>
-                    <Card.Img src='#' />
+                <Card.Body style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <Card.Title className='text-center'>{book.nome}</Card.Title>
+                    <Card.Img
+                        src={book.imagem}
+                        alt={`Capa do livro ${book.nome}`}
+                        style={{ width: '150px', height: '200px', objectFit: 'cover' }}
+                    />
                     <Card.Text>
                         <strong>Autor:</strong> {book.autor} <br />
                         <strong>Páginas:</strong> {book.paginas} <br />

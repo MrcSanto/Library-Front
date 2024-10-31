@@ -13,6 +13,7 @@ export interface Book {
     restantes: number;
     qtdEmprestimos?: number;
     dataAdd?: Date;
+    imagem?: string;
     categoria: Categoria;
 }
 

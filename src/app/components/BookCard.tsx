@@ -17,16 +17,22 @@ export const BookCard: React.FC<BookCardProps> = ({ book }) => {
     };
 
     return <>
-        <Card style={{ marginBottom: "1rem" }}>
+        <Card style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: "1rem" }}>
             <Card.Body>
-                <Card.Title>{book.nome}</Card.Title>
-                <Card.Img src='#'></Card.Img>
-                <Card.Text>
-                    <strong>Autor:</strong> {book.autor} <br />
-                    <strong>Páginas:</strong> {book.paginas} <br />
-                    <strong>Categoria:</strong> {book.categoria.nome} <br />
-                </Card.Text>
-                <Button onClick={handleShowDetails}>Saiba mais</Button>
+                <Card.Title className='text-center'>{book.nome}</Card.Title>
+                <Card.Img
+                    src={book.imagem}
+                    alt={`Capa do livro ${book.nome}`}
+                    style={{ width: '150px', height: '200px', objectFit: 'cover' }}
+                />
+                <Card.Body className='text-center'>
+                    <strong>Autor:</strong> {book.autor} <br/>
+                    <strong>Páginas:</strong> {book.paginas} <br/>
+                    <strong>Categoria:</strong> {book.categoria.nome} <br/>
+                </Card.Body>
+                <div className="d-flex justify-content-center">
+                    <Button onClick={handleShowDetails}>Saiba mais</Button>
+                </div>
             </Card.Body>
         </Card>
 

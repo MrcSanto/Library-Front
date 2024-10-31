@@ -23,7 +23,9 @@ export const CategoriaCard: React.FC<CategoriaCardProps> = ({ categoria }) => {
                     <Card.Text>
                         <strong>Descrição:</strong> {categoria.descricao}
                     </Card.Text>
-                    <Button onClick={handleShowDetails}>Saiba mais</Button>
+                    <div className="d-flex justify-content-center">
+                        <Button onClick={handleShowDetails}>Saiba mais</Button>
+                    </div>
                 </Card.Body>
             </Card>
 

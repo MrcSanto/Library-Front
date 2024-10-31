@@ -31,7 +31,7 @@ export default function Categories() {
 
     return (
         <>
-            <NavbarTop />
+            <NavbarTop /><br/>
             <h1 className='text-center'>Contamos com diversos gêneros literários</h1><br/>
             <Container className="mt-3 mb-4">
                 <Row>

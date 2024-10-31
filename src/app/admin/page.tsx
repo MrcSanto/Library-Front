@@ -6,6 +6,7 @@ import NavbarTop from "@/app/components/NavbarTop";
 import { AdminCard } from "../components/AdminCard";
 import {Book, Categoria} from '@/app/types/types';
 import {Button, Col, Container, Form, Row, Spinner, Modal} from "react-bootstrap";
+import FooterBar from "@/app/components/FooterBar";
 
 export default function AdminPage() {
     const router = useRouter();
@@ -30,9 +31,30 @@ export default function AdminPage() {
     const [selectedCategoryId, setSelectedCategoryId] = useState<number | undefined>(undefined);
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
+        const token  = localStorage.getItem('token');
         if (!token) {
             router.push('/login');
+        }
+        else {
+            const expiredToken = (token : string) => {
+                try {
+                    const payload = JSON.parse(atob(token.split('.')[1]));
+                    const currentTime = Math.floor(Date.now() / 1000);
+
+
+                    console.log(payload.exp < currentTime)
+                    return payload.exp < currentTime;
+
+                } catch (error) {
+                    console.error('Erro ao decodificar o token:',error);
+                    return true;
+                }
+            }
+
+            if (expiredToken(token)) {
+                localStorage.removeItem('token');
+                router.push('/login');
+            }
         }
     }, [router]);
 
@@ -52,7 +74,7 @@ export default function AdminPage() {
         fetch(`http://localhost:5000/library/books/?skip=${currentPage}&take=${booksPerPage}`)
             .then(res => res.json())
             .then(data => {
-                //console.log(data);
+                console.log(data);
                 setBooks(data.data);
                 //console.log(`http://localhost:5000/library/books/?skip=${currentPage}&take=${booksPerPage}`);
             })
@@ -117,7 +139,7 @@ export default function AdminPage() {
 
     return (
         <>
-            <NavbarTop />
+            <NavbarTop /><br/>
             <div id="livros">
                 <h1 className='text-center'>Livros</h1>
                 <Container className="mt-3 mb-4">
@@ -231,9 +253,7 @@ export default function AdminPage() {
                     </Button>
                 </Modal.Footer>
             </Modal>
-
-            <h1 id="emprestimos" className='text-center'>Empréstimos</h1>
-            <p>Conteúdo relacionado a empréstimos.</p>
+            <FooterBar></FooterBar>
         </>
     );
 }
