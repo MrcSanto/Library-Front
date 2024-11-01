@@ -48,7 +48,7 @@ export default function Page() {
     return (
         <>
             <NavbarTop />
-            <Container className="mt-3 mb-4">
+            <Container className="mt-3 mb-4" >
                 <Row>
                     <Col md={4}>
                         <Form.Control

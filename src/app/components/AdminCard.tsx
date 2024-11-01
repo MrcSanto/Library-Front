@@ -2,6 +2,7 @@ import { Card, Modal, Form } from "react-bootstrap";
 import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import { Book } from "@/app/types/types";
+import {useRouter} from "next/navigation";
 
 interface BookCardProps {
     book: Book;
@@ -12,6 +13,7 @@ interface BookCardProps {
 export const AdminCard: React.FC<BookCardProps> = ({ book, onUpdate, onDelete }) => {
     const [showEditModal, setShowEditModal] = useState(false);
     const [editedBook, setEditedBook] = useState<Book>(book);
+    const router = useRouter();
 
     const handleEdit = () => {
         setEditedBook(book);
@@ -32,12 +34,16 @@ export const AdminCard: React.FC<BookCardProps> = ({ book, onUpdate, onDelete })
                 autor : editedBook.autor,
                 isbn : editedBook.isbn,
                 paginas: editedBook.paginas,
-                restantes: editedBook.restantes
+                restantes: editedBook.restantes,
+                qtdEmprestimos: editedBook.qtdEmprestimos,
+                imagem: editedBook.imagem
             }),
         });
 
-        if (!response.ok) {
-            console.error('Erro ao atualizar o livro');
+        if (response.status === 401) {//significa que provavelmente o token expirou ou está inválido
+            alert('Sessão expirada!')
+            localStorage.removeItem('token');
+            router.push('/login');
             return;
         }
 
@@ -56,8 +62,10 @@ export const AdminCard: React.FC<BookCardProps> = ({ book, onUpdate, onDelete })
             },
         });
 
-        if (!response.ok) {
-            console.error('Erro ao excluir o livro');
+        if (response.status === 401) { //significa que provavelmente o token expirou ou está inválido
+            alert('Sessão expirada!')
+            localStorage.removeItem('token');
+            router.push('/login');
             return;
         }
 
@@ -65,13 +73,15 @@ export const AdminCard: React.FC<BookCardProps> = ({ book, onUpdate, onDelete })
         setShowEditModal(false);
     };
 
+    const defaultImage = '/download.svg'
+    
     return (
         <>
             <Card style={{ marginBottom: "1rem" }}>
                 <Card.Body style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <Card.Title className='text-center'>{book.nome}</Card.Title>
                     <Card.Img
-                        src={book.imagem}
+                        src={book.imagem || defaultImage}
                         alt={`Capa do livro ${book.nome}`}
                         style={{ width: '150px', height: '200px', objectFit: 'cover' }}
                     />
@@ -137,6 +147,17 @@ export const AdminCard: React.FC<BookCardProps> = ({ book, onUpdate, onDelete })
                                 onChange={(e) => setEditedBook({ ...editedBook, qtdEmprestimos: Number(e.target.value) })}
                             />
                         </Form.Group>
+
+                        <Form.Group controlId="formBookImage">
+                            <Form.Label>URL da Imagem</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Insira a URL da imagem da capa"
+                                value={editedBook.imagem || ''}
+                                onChange={(e) => setEditedBook({ ...editedBook, imagem: e.target.value })}
+                            />
+                        </Form.Group>
+
                     </Form>
 
                 </Modal.Body>

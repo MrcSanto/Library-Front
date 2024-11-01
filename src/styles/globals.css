@@ -68,14 +68,18 @@ a {
     margin: auto;
 }
 
+.navbar-dark .nav-link:hover {
+    color: #ffdd57 !important;
+    text-decoration: underline;
+}
+
+.navbar-dark .dropdown-item:hover {
+    color: #ffdd57 !important;
+    text-decoration: underline;
+}
+
 @media (prefers-color-scheme: dark) {
     html {
         color-scheme: dark;
     }
-}
-
-.navbar-bottom {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
 }

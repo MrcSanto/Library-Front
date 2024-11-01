@@ -16,15 +16,19 @@ export const BookCard: React.FC<BookCardProps> = ({ book }) => {
         setShowModal(true);
     };
 
+    const defaultImage = '/download.svg'
+
     return <>
         <Card style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: "1rem" }}>
             <Card.Body>
                 <Card.Title className='text-center'>{book.nome}</Card.Title>
-                <Card.Img
-                    src={book.imagem}
-                    alt={`Capa do livro ${book.nome}`}
-                    style={{ width: '150px', height: '200px', objectFit: 'cover' }}
-                />
+                <div style={{display: 'flex', justifyContent: 'center', width: '100%'}}>
+                    <Card.Img
+                        src={book.imagem || defaultImage}
+                        alt={`Capa do livro ${book.nome}`}
+                        style={{width: '150px', height: '200px', objectFit: 'cover'}}
+                    />
+                </div>
                 <Card.Body className='text-center'>
                     <strong>Autor:</strong> {book.autor} <br/>
                     <strong>Páginas:</strong> {book.paginas} <br/>
@@ -54,6 +58,11 @@ export const BookCard: React.FC<BookCardProps> = ({ book }) => {
                         <p><strong>Autor:</strong> {selectedBook.autor}</p>
                         <p><strong>ISBN:</strong> {selectedBook.isbn}</p>
                         <p><strong>Restantes:</strong> {selectedBook.restantes}</p>
+                        <p><strong>Quantidade de Empréstimos:</strong> {selectedBook.qtdEmprestimos}</p>
+                        <p><strong>Data
+                            Adição:</strong> {selectedBook.dataAdd ? new Date(selectedBook.dataAdd).toLocaleDateString() : 'No info'}
+                        </p>
+
                     </>
                 ) : (
                     <p>Carregando informações do livro...</p>

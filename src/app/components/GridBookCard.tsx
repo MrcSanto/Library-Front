@@ -6,6 +6,8 @@ interface BookCardProps {
 }
 
 export const CardGrid: React.FC<BookCardProps> = ({ books }) => {
+    const defaultImage = '/download.svg'
+
     return (
         <Row xs={1} md={2} className="g-4">
             {books.map((book, index) => (
@@ -18,17 +20,19 @@ export const CardGrid: React.FC<BookCardProps> = ({ books }) => {
                             {`${index + 1}º Lugar`}
                         </Card.Header>
                         <Card.Img
-                            src={book.imagem}
+                            src={book.imagem || defaultImage}
                             alt={`Capa do livro ${book.nome}`}
                             style={{ width: '150px', height: '200px', objectFit: 'cover' }}
                         />
                         <Card.Body>
                             <Card.Title className='text-center'>{book.nome}</Card.Title>
                             <Card.Body>
-                                <strong>Autor:</strong> {book.autor} <br />
-                                <strong>Páginas:</strong> {book.paginas} <br />
-                                <strong>Categoria:</strong> {book.categoria.nome} <br />
-                                <strong>Disponível desde:</strong> {book.dataAdd ? book.dataAdd.toString() : 'Data não disponível'} <br/>
+                                <strong>Autor:</strong> {book.autor} <br/>
+                                <strong>Páginas:</strong> {book.paginas} <br/>
+                                <strong>Categoria:</strong> {book.categoria.nome} <br/>
+                                <strong>Disponível
+                                    desde:</strong> {book.dataAdd ? new Date(book.dataAdd).toLocaleDateString() : 'Data não disponível'}
+                                <br/>
                                 <strong>Quantidade de empréstimos:</strong> {book.qtdEmprestimos}
                             </Card.Body>
                         </Card.Body>

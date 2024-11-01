@@ -13,9 +13,9 @@ const geistMono = localFont({
     weight: "100 900",
 });
 const jetbrainsMono = localFont({
-    src: "./fonts/JetbrainsMono-Regular.woff2", // Certifique-se de que este caminho está correto
+    src: "./fonts/JetbrainsMono-Light.woff2",
     variable: "--font-jetbrains-mono",
-    weight: "400", // Altere para o peso correto se necessário
+    weight: "100 400",
 });
 
 export const metadata: Metadata = {

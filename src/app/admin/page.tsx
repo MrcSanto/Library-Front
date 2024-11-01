@@ -24,7 +24,9 @@ export default function AdminPage() {
         isbn: 0,
         paginas: 0,
         restantes: 0,
-        categoria: { categoriaId: 0, nome: '', descricao: '' }
+        categoria: { categoriaId: 0, nome: '', descricao: '' },
+        qtdEmprestimos : 0,
+        imagem: null
     });
 
     const [categories, setCategories] = useState<Categoria[]>([]);
@@ -241,6 +243,16 @@ export default function AdminPage() {
                                     </option>
                                 ))}
                             </Form.Control>
+                        </Form.Group>
+
+                        <Form.Group controlId="formBookImage">
+                            <Form.Label>URL da Imagem</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Insira a URL da imagem da capa"
+                                value={newBook.imagem || ''}
+                                onChange={(e) => setNewBook({ ...newBook, imagem: e.target.value })}
+                            />
                         </Form.Group>
                     </Form>
                 </Modal.Body>

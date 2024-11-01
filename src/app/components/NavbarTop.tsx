@@ -23,7 +23,7 @@ export default function NavbarTop() {
         setTimeout(() => {
             setShowModal(false);
             router.push('/');
-        }, 2000);
+        }, 1000);
     };
 
     const handleRedirect = (type: string) => {
